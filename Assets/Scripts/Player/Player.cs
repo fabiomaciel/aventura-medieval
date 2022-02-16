@@ -10,12 +10,14 @@ public class Player : MonoBehaviour
     private bool _onGround;
     public bool _jump = true;
 
+    Animator anima;
     public float velocidade = 4f;
     public float forcaPulo = 300f;
 
     // Start is called before the first frame update
     void Start()
     {
+        anima = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
 
     }
@@ -34,8 +36,14 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         float h = Input.GetAxis("Horizontal");
-        _rb.velocity = new Vector2(h * velocidade, _rb.velocity.y);
-
+        if (h!=0)
+        {
+            anima.SetBool("Move", true);
+        }
+        else
+        {
+            anima.SetBool("Move", false);
+        }
         if (h < 0 && !_facingRight)
         {
             Flip();
@@ -50,6 +58,8 @@ public class Player : MonoBehaviour
             _jump = false;
             _rb.AddForce(Vector2.up * forcaPulo);
         }
+        _rb.velocity = new Vector2(h * velocidade, _rb.velocity.y);
+
     }
     void Flip()
     {
