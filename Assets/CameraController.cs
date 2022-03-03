@@ -19,7 +19,6 @@ public class CameraController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-
     {
         if (_Player == null)
         {
@@ -30,7 +29,7 @@ public class CameraController : MonoBehaviour
             float PlayerX = _Player.transform.position.x;
             float PlayerY = _Player.transform.position.y;
             transform.position = new Vector3(PlayerX, PlayerY + 1.8f, -10);
-            Debug.Log(_Player.transform.position);
+            //Debug.Log(_Player.transform.position);
         }
         //offset = player.transform.position;//transform.position - player.transform.position;
         //transform.position = offset;//player.transform.position + offset;
