@@ -5,21 +5,30 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private Rigidbody2D _rb;
+    Animator anima;
+    SpriteRenderer sprite;
 
     private bool _facingRight;
     private bool _onGround;
     public bool _jump = false;
 
-    Animator anima;
-    public float velocidade = 4f;
-    public float forcaPulo = 300f;
+
+    private float velocidade = 4f;
+    private float forcaPulo = 300f;
     public bool inicioPulo = false;
     public bool onMove = true;
+    public int life = 5;
+    public bool dead = false;
+    private bool imune = false;
+
     // Start is called before the first frame update
     void Start()
     {
+        life = 5;
         anima = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
+        sprite = GetComponent<SpriteRenderer>();
+
 
     }
 
@@ -33,6 +42,19 @@ public class Player : MonoBehaviour
         Animacaoes();
     }
 
+    void tatakae()
+    {
+        //if (Input.GetButtonDown(KeyCode.X))
+        //{
+
+        //}
+    }
+
+    void morte()
+    {
+        sprite.color = new Color(255, 255, 255, 110);
+
+    }
     private void FixedUpdate()
     {
         if (_jump)
@@ -77,8 +99,6 @@ public class Player : MonoBehaviour
     }
     void Animacaoes()
     {
-        //Vector2 v2Velocity = _rb.velocity;
-        //Debug.Log(v2Velocity);
         float Velocity_Y = _rb.velocity.y;
         if (Velocity_Y>0 || _jump)
         {
@@ -101,6 +121,36 @@ public class Player : MonoBehaviour
     {
         onMove = true;
         _onGround = true;
+    }
+
+    public void danoPlayer()
+    {
+        if (imune==false)
+        {
+            life -= 1;
+            if (life <= 0)
+            {
+                dead = true;
+                morte();
+                sprite.color = new Color(0, 0, 0, 110);
+            }
+            else 
+            {
+                imune = true;
+                sprite.color = new Color(255, 0, 0, 255);
+
+                StartCoroutine(tirarImunidadeDoDano());
+            }
+        }
+
+    }
+    IEnumerator tirarImunidadeDoDano()
+    {
+        yield return new WaitForSeconds(1f);
+        imune = false;
+        sprite.color = new Color(255, 255, 255, 255);
+
+
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
